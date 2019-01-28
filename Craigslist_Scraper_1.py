@@ -413,7 +413,7 @@ civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandb
 print("Daily Table Done!")
 
 print("Finalizing Master Table...")
-civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'drop')
+civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'append')
 print("Daily Master Done!")
 
 
