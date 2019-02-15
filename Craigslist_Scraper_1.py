@@ -256,7 +256,7 @@ for z in range(len(zips)):
                 if bdpat.search(str(yy)) != None:
                     psbd = str(yy.get_text())            
                     psbd = [int(yy) for yy in psbd if yy.isdigit()]            
-        if len(psbd) < 1:
+        if len(str(psbd)) < 1:
             psbd = 'NA'
         else:
             psbd = psbd[0]
@@ -269,7 +269,7 @@ for z in range(len(zips)):
                 if bapat.search(str(yy)) != None:
                     psba = str(yy.get_text())            
                     psba = [int(yy) for yy in psba if yy.isdigit()]            
-        if len(psba) < 1:
+        if len(str(psba)) < 1:
             psba = 'NA'
         else:
             psba = psba[0]
