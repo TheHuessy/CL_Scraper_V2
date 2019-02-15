@@ -258,8 +258,6 @@ for z in range(len(zips)):
                     psbd = [int(yy) for yy in psbd if yy.isdigit()]            
         if len(str(psbd)) < 1:
             psbd = 'NA'
-        else:
-            psbd = psbd[0]
             
         ##Number of Baths
         bapat = re.compile(r"ba", re.IGNORECASE)
@@ -271,8 +269,7 @@ for z in range(len(zips)):
                     psba = [int(yy) for yy in psba if yy.isdigit()]            
         if len(str(psba)) < 1:
             psba = 'NA'
-        else:
-            psba = psba[0]
+
         
         ##Sqft
         pssq = str()
