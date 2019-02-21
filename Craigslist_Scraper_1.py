@@ -117,7 +117,7 @@ for z in range(len(zips)):
     except:
         zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d")
     
-    pdt = lis[i].find('time', {'class' : 'result-date'})
+    pdt = lis[0].find('time', {'class' : 'result-date'})
     pdt = datetime.datetime.strptime(pdt['datetime'], "%Y-%m-%d %H:%M")
     tdelt = pdt-zdt
     tdelt = int(tdelt.days)
