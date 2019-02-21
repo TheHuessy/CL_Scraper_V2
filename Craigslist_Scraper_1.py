@@ -1,4 +1,4 @@
-import urllib.request
+from urllib import request
 from lxml import html
 from bs4 import BeautifulSoup as bs
 import pandas as pd
@@ -8,6 +8,7 @@ import random
 import time
 import civis
 import os
+from pprint import pprint
 
 ## BRING INN TIMESTAMP TABLE ##
 
@@ -16,6 +17,8 @@ print("Reading in Timestamp Table...")
 ctime = civis.io.read_civis("sandbox.craigslist_timestampcheck", database = 'City of Boston', use_pandas = True)
 
 print("Timestamp Table read in!")
+
+#civ_api = '15d4a87a7118a720731ec4b35b7c2039c1a577f758aac7b22a129df389735579'
 
 ## DUMMY DATA FRAME ##
 
@@ -41,8 +44,7 @@ cltpull = pd.DataFrame(data = {"Post_Title":[],
 
 ## ZIPS LIST ##
 
-# zips = ["02118","02119","02120","02130","02134","02135","02445","02446","02447","02109","02111","02113","02121","02122"]
-zips = ["02118"]
+zips = ["02118","02119","02120","02130","02134","02135","02445","02446","02447","02109","02111","02113","02121","02122"]
 
 print("Starting Scrape")
 
@@ -83,7 +85,7 @@ for z in range(len(zips)):
     time.sleep(slp)
     
     try:
-        fp = urllib.request.urlopen(url)
+        fp = request.urlopen(url)
     except:
         fp.close()
         print("URL nicht erreichtbar: " + str(url))
@@ -110,7 +112,19 @@ for z in range(len(zips)):
     
     ##load in the most recent date for this zip
     zdt = ctime.loc[ctime.zips == int(zips[z]), 'mrd'].values[0]
-    zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d")
+    try:
+        zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d %H:%M:%S")
+    except:
+        zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d")
+    
+    pdt = lis[i].find('time', {'class' : 'result-date'})
+    pdt = datetime.datetime.strptime(pdt['datetime'], "%Y-%m-%d %H:%M")
+    tdelt = pdt-zdt
+    tdelt = int(tdelt.days)
+    if tdelt < 0:
+        print('This zip was already done')
+        print("Finished zip " + str(zips[z]) + ", " + str(z+1) + " of " + str(len(zips)))
+        continue
    
     dlk = []
     for i in range(len(lis)):
@@ -146,7 +160,7 @@ for z in range(len(zips)):
         time.sleep(slp)
         
         try:
-            fp = urllib.request.urlopen(purl)
+            fp = request.urlopen(purl)
         except:
             fp.close()
             print("URL is not available: " + str(purl))
@@ -175,7 +189,10 @@ for z in range(len(zips)):
         #zdt = datetime.datetime(2019, 1, 1)
         
         zdt = ctime.loc[ctime.zips == int(zips[z]), 'mrd'].values[0]
-        zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d")
+        try:
+            zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d %H:%M:%S")
+        except:
+            zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d")
         
         for j in range(len(lis)):
             pdt = lis[j].find('time', {'class' : 'result-date'})
@@ -205,7 +222,7 @@ for z in range(len(zips)):
         time.sleep(slp)
         
         try:
-            llk = urllib.request.urlopen(dlk[q])
+            llk = request.urlopen(dlk[q])
         except:
             llk.close()
             print("Link couldn't read: " + str(dlk[q]))
@@ -257,7 +274,7 @@ for z in range(len(zips)):
                 if bdpat.search(str(yy)) != None:
                     psbd = str(yy.get_text())            
                     psbd = [int(yy) for yy in psbd if yy.isdigit()]            
-        if len(str(psbd)) < 1:
+        if len(psbd) < 1:
             psbd = 'NA'
             
         ##Number of Baths
@@ -268,9 +285,8 @@ for z in range(len(zips)):
                 if bapat.search(str(yy)) != None:
                     psba = str(yy.get_text())            
                     psba = [int(yy) for yy in psba if yy.isdigit()]            
-        if len(str(psba)) < 1:
+        if len(psba) < 1:
             psba = 'NA'
-
         
         ##Sqft
         pssq = str()
@@ -374,10 +390,10 @@ for z in range(len(zips)):
         clpull = clpull.append(Lpull)
         
         print('===============')
-        print("Finished with post " + str(q+1) + " of " + str(len(dlk)) + " at " + str(datetime.datetime.now()))
+        print("Finished with post " + str(q+1) + " of " + str(len(dlk)) + " for zip " + str(zips[z]) + " at " + str(datetime.datetime.now()))
         print("Posts grabbed so far: " + str(len(clpull.index)))
         print('+++++++++++++++')
-        
+
         slp = random.randint(6,10)
         print('SUPER sleeping for ' + str(slp) + ' seconds at ' + str(datetime.datetime.now()))
         time.sleep(slp)
@@ -404,14 +420,22 @@ for z in range(len(zips)):
     ## append clpull to cltpull
     cltpull = cltpull.append(clpull)
         
-    print("Finished zip " + str(zips[z]) + ", " + str(z) + " of " + len(zips))
+    print("Finished zip " + str(zips[z]) + ", " + str(z+1) + " of " + str(len(zips)))
+    
+print('Current Daily Output Before Civis Loading:')
+pprint(cltpull)
+print('........................')
+print('........................')
+print('........................')
 
 print("Finalizing Daily Table...")
-civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
+## Need to add .reset_index() to keep column order when loading into civis
+civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
 print("Daily Table Done!")
 
 print("Finalizing Master Table...")
-civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'append')
+## Need to add .reset_index() to keep column order when loading into civis
+civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'append')
 print("Daily Master Done!")
 
 
