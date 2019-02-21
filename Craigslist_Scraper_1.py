@@ -151,7 +151,7 @@ for z in range(len(zips)):
     #The start of the second page addtion to the url
     pn = 120
     #we will keep paginating until 
-    while pn <= mlist:
+    while pn <= int(mlist):
         purl = str(url)+'&s='+str(pn)
             
         #OPEN EACH LANDING PAGE
