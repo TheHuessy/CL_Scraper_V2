@@ -435,7 +435,7 @@ print("Daily Table Done!")
 
 print("Finalizing Master Table...")
 ## Need to add .reset_index() to keep column order when loading into civis
-civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_master', #existing_table_rows = 'append')
+civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'append')
 print("Daily Master Done!")
 
 
