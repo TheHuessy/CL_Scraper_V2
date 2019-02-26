@@ -218,7 +218,7 @@ for z in range(len(zips)):
 
     #GOING THROUGH ALL THE LINKS AND PULLING INFO
     # for q in range(len(dlk)):
-    for q in range(2):
+    for q in range(0,1):
         
         slp = random.randint(1,7)
         print('Sleeping for ' + str(slp) + ' seconds at ' + str(datetime.datetime.now()))
