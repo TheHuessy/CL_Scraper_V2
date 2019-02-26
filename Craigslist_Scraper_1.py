@@ -127,7 +127,8 @@ for z in range(len(zips)):
         continue
    
     dlk = []
-    for i in range(len(lis)):
+    # for i in range(len(lis)):
+    for i in range(0,2):
         pdt = lis[i].find('time', {'class' : 'result-date'})
         pdt = datetime.datetime.strptime(pdt['datetime'], "%Y-%m-%d %H:%M")
         tdelt = pdt-zdt
