@@ -127,8 +127,8 @@ for z in range(len(zips)):
         continue
    
     dlk = []
-    # for i in range(len(lis)):
-    for i in range(0,2):
+    for i in range(len(lis)):
+    
         pdt = lis[i].find('time', {'class' : 'result-date'})
         pdt = datetime.datetime.strptime(pdt['datetime'], "%Y-%m-%d %H:%M")
         tdelt = pdt-zdt
@@ -196,6 +196,7 @@ for z in range(len(zips)):
             zdt = datetime.datetime.strptime(zdt, "%Y-%m-%d")
         
         for j in range(len(lis)):
+        
             pdt = lis[j].find('time', {'class' : 'result-date'})
             pdt = datetime.datetime.strptime(pdt['datetime'], "%Y-%m-%d %H:%M")
             tdelt = pdt-zdt
@@ -216,7 +217,8 @@ for z in range(len(zips)):
         pn = pn + 120
 
     #GOING THROUGH ALL THE LINKS AND PULLING INFO
-    for q in range(len(dlk)):
+    # for q in range(len(dlk)):
+    for q in range(2):
         
         slp = random.randint(1,7)
         print('Sleeping for ' + str(slp) + ' seconds at ' + str(datetime.datetime.now()))
@@ -433,17 +435,17 @@ print("Finalizing Daily Table...")
 ## Need to add .reset_index() to keep column order when loading into civis
 print("This is what the column order is pre-civis add:\n" + list(ctpull))
 # print("Here it is with the reset index attribute:\n" + list(ctpull.reset_index))
-civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
-print("Daily Table Done!")
+#civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
+#print("Daily Table Done!")
 
-print("Finalizing Master Table...")
+#print("Finalizing Master Table...")
 ## Need to add .reset_index() to keep column order when loading into civis
-civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'drop')
-print("Daily Master Done!")
+#civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'drop')
+#print("Daily Master Done!")
 
 
-print("Finalizing timestamp table...")
-civis.io.dataframe_to_civis(ctime, database = 'City of Boston', table = 'sandbox.craigslist_timestampcheck', existing_table_rows = 'drop')
-print("Timestamp Table Done!")
+#print("Finalizing timestamp table...")
+#civis.io.dataframe_to_civis(ctime, database = 'City of Boston', table = 'sandbox.craigslist_timestampcheck', existing_table_rows = 'drop')
+#print("Timestamp Table Done!")
 
 print("All done!")
