@@ -433,7 +433,7 @@ for z in range(len(zips)):
 
 print("Finalizing Daily Table...")
 ## Need to add .reset_index() to keep column order when loading into civis
-print("This is what the column order is pre-civis add:\n" + list(ctpull))
+print("This is what the column order is pre-civis add:\n" + list(cltpull))
 # print("Here it is with the reset index attribute:\n" + list(ctpull.reset_index))
 #civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
 #print("Daily Table Done!")
