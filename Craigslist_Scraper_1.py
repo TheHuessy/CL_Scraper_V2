@@ -433,21 +433,24 @@ for z in range(len(zips)):
 
 print("Finalizing Daily Table...")
 ## Need to add .reset_index() to keep column order when loading into civis
-print("This is what the column order is pre-civis add:\n" + str(list(cltpull)))
-print("==================================================")
-print("Here's the column order with reset index applied:\n" + str(list(cltpull.reset_index())))
-# print("Here it is with the reset index attribute:\n" + list(ctpull.reset_index))
-#civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
-#print("Daily Table Done!")
+#print("This is what the column order is pre-civis add:\n" + str(list(cltpull)))
+#print("==================================================")
+#print("Here's the column order with reset index applied:\n" + str(list(cltpull.reset_index())))
+## The reset index isn't helpful, it just adds an index column, which I'm assuming will
+## just cause the table writing to fail. Going to try to drop all tables and start over with this 
+## scraper.
 
-#print("Finalizing Master Table...")
-## Need to add .reset_index() to keep column order when loading into civis
-#civis.io.dataframe_to_civis(cltpull.reset_index(), database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'drop')
-#print("Daily Master Done!")
+civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandbox.craigslist_daily', existing_table_rows = 'drop')
+print("Daily Table Done!")
+
+print("Finalizing Master Table...")
+
+civis.io.dataframe_to_civis(cltpull, database = 'City of Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'drop')
+print("Daily Master Done!")
 
 
-#print("Finalizing timestamp table...")
-#civis.io.dataframe_to_civis(ctime, database = 'City of Boston', table = 'sandbox.craigslist_timestampcheck', existing_table_rows = 'drop')
-#print("Timestamp Table Done!")
+print("Finalizing timestamp table...")
+civis.io.dataframe_to_civis(ctime, database = 'City of Boston', table = 'sandbox.craigslist_timestampcheck', existing_table_rows = 'drop')
+print("Timestamp Table Done!")
 
 print("All done!")
