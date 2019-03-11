@@ -239,66 +239,86 @@ for z in range(len(zips)):
         bsl = bs(tw, 'html.parser')
         
         ##Post Title
-        pstt = bsl.find("span", {"id" : "titletextonly"})
-        pstt = pstt.get_text()
+        try:
+            pstt = bsl.find("span", {"id" : "titletextonly"})
+            pstt = pstt.get_text()
+        except:
+            pstt = "NA"
         
         
         ##Lat
-        pslt = bsl.find("div", {"id" : "map"})
-        pslt = pslt['data-latitude']
+        try:
+            pslt = bsl.find("div", {"id" : "map"})
+            pslt = pslt['data-latitude']
+        except:
+            pslt = "NA"
         
         
         ##Lon
-        psln = bsl.find("div", {"id" : "map"})
-        psln = psln['data-longitude']
+        try:
+            psln = bsl.find("div", {"id" : "map"})
+            psln = psln['data-longitude']
+        except:
+            psln = "NA"
         
         ##Lat Lon Accuracy
-        psllt = bsl.find("div", {"id" : "map"})
-        psllt = psllt['data-accuracy']
+        try:
+            psllt = bsl.find("div", {"id" : "map"})
+            psllt = psllt['data-accuracy']
+        except:
+            psllt = "NA"
         
         
         ##Link Post date
-        pspt = bsl.find("time", class_ = "date timeago")
-        pspt = pspt['datetime']        
+        try:
+            pspt = bsl.find("time", class_ = "date timeago")
+            pspt = pspt['datetime']
+        except:
+            pspt = "NA"
         
         ##Price
-        pspr = bsl.find("span", {"class" : "price"})
-        pspr = pspr.get_text()
-        pspr = pspr.replace('$', '')
-        
+        try:
+            pspr = bsl.find("span", {"class" : "price"})
+            pspr = pspr.get_text()
+            pspr = pspr.replace('$', '')
+        except:
+            pspr = "NA"
         
         
         ##Number of BDs
-        bdpat = re.compile(r"br", re.IGNORECASE)
-        psslb = bsl.find_all("span", {"class" : "shared-line-bubble"})
-        for tt in psslb:
-            ab = tt    
-            for yy in ab:
-                if bdpat.search(str(yy)) != None:
-                    psbd = str(yy.get_text())            
-                    psbd = [int(yy) for yy in psbd if yy.isdigit()]            
-        if len(psbd) < 1:
+        try:
+            bdpat = re.compile(r"br", re.IGNORECASE)
+            psslb = bsl.find_all("span", {"class" : "shared-line-bubble"})
+            for tt in psslb:
+                ab = tt    
+                for yy in ab:
+                    if bdpat.search(str(yy)) != None:
+                        psbd = str(yy.get_text())            
+                        psbd = [int(yy) for yy in psbd if yy.isdigit()]            
+        except:
             psbd = 'NA'
             
         ##Number of Baths
-        bapat = re.compile(r"ba", re.IGNORECASE)
-        for tt in psslb:
-            ab = tt    
-            for yy in ab:
-                if bapat.search(str(yy)) != None:
-                    psba = str(yy.get_text())            
-                    psba = [int(yy) for yy in psba if yy.isdigit()]            
-        if len(psba) < 1:
+        try:
+            bapat = re.compile(r"ba", re.IGNORECASE)
+            for tt in psslb:
+                ab = tt    
+                for yy in ab:
+                    if bapat.search(str(yy)) != None:
+                        psba = str(yy.get_text())            
+                        psba = [int(yy) for yy in psba if yy.isdigit()]            
+        except:
             psba = 'NA'
         
         ##Sqft
-        pssq = str()
-        for tt in psslb:
-            ab = tt
-            if "ft" in ab:
-                pssq = ab.get_text()
-                pssq = pssq.replace('ft2', '')
-        if len(pssq) < 1:
+        try:
+            pssq = str()
+            for tt in psslb:
+                ab = tt
+                if "ft" in ab:
+                    pssq = ab.get_text()
+                    pssq = pssq.replace('ft2', '')
+        except:
             pssq = 'NA'
         
         ##Type
@@ -313,63 +333,71 @@ for z in range(len(zips)):
                "townhouse",
                "manufactured",
                "assisted living"]
-        pstyb = bsl.find_all("p", {"class" : "attrgroup"})
-        psty = str()
-        for u in pstyb:
-            f = u.find_all('span')
-            for g in f:
-                if g.get_text() in hty:
-                    psty = g.get_text()
-        if len(psty) < 1:
+        try:
+            pstyb = bsl.find_all("p", {"class" : "attrgroup"})
+            psty = str()
+            for u in pstyb:
+                f = u.find_all('span')
+                for g in f:
+                    if g.get_text() in hty:
+                        psty = g.get_text()
+        except:
             psty = 'NA'    
 
         ##Laundry
-        psld = str()
-        for u in pstyb:
-            f = u.find_all('span')     
-            for g in f:
-                if "laundry" in g.get_text():
-                    psld = g.get_text()
-                elif "w/d" in g.get_text():
-                    psld = g.get_text()
-        if len(psld) < 1:
+        try:
+            psld = str()
+            for u in pstyb:
+                f = u.find_all('span')     
+                for g in f:
+                    if "laundry" in g.get_text():
+                        psld = g.get_text()
+                    elif "w/d" in g.get_text():
+                        psld = g.get_text()
+        except:
             psld = 'NA'
     
         ##Pets
-        pspts = str()
-        for u in pstyb:
-            f = u.find_all('span')
+        try:
+            pspts = str()
+            for u in pstyb:
+                f = u.find_all('span')
 
-            for g in f:
-                if " OK" in g.get_text():
-                    pspts = g.get_text()
-        if len(pspts) < 1:
+                for g in f:
+                    if " OK" in g.get_text():
+                        pspts = g.get_text()
+        except:
             pspts = 'NA'
     
         ##Parking
-        pspk = str()
-        for u in pstyb:
-            f = u.find_all('span')
-            for g in f:
-                if "garage" in g.get_text():
-                    pspk = g.get_text()
-                elif "parking" in g.get_text():
-                    pspk = g.get_text()
-        if len(pspk) < 1:
+        try:
+            pspk = str()
+            for u in pstyb:
+                f = u.find_all('span')
+                for g in f:
+                    if "garage" in g.get_text():
+                        pspk = g.get_text()
+                    elif "parking" in g.get_text():
+                        pspk = g.get_text()
+        except:
             pspk = 'NA'
     
         ##Scrape Date
         psscd = datetime.datetime.now()
     
         ##Post Date
-        pspd = bsl.find("time", class_ = "date timeago")
-        pspd = pspd['datetime']
-        if len(pspd) < 1:
+        try:
+            pspd = bsl.find("time", class_ = "date timeago")
+            pspd = pspd['datetime']
+        except:
             pspd = 'NA'
     
         ##Post Body
-        psbod = bsl.find("section", {"id" : "postingbody"})
-        psbod = psbod.get_text()
+        try:
+            psbod = bsl.find("section", {"id" : "postingbody"})
+            psbod = psbod.get_text()
+        except:
+            psbod = "NO BODY TEXT AVAILABLE"
         
         Lpull = pd.DataFrame(data = {"Post_Title":[pstt],
                                      "Post_Date": [pspt],
