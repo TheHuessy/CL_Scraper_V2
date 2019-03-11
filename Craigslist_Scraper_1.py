@@ -440,8 +440,12 @@ for z in range(len(zips)):
     
     ## Check the clpull most recent post date and add it to ctime
     mrp = max(clpull['Post_Date'])
-    mrp = mrp.replace("-0500", "")
-    mrp = mrp.replace("T", " ")
+    #mrp = mrp.replace("-0500", "")
+    #mrp = mrp.replace("T", " ")
+    mrp = re.sub('\..*', '', mrp)
+    #Test what happens when you do the above regex with a minus sign instead of a period
+    #tm = re.sub('T', ' ', tm)
+    
     mb = datetime.datetime.strptime(mrp, "%Y-%m-%d %H:%M:%S")
     
     ctime.loc[ctime.zips == int(zips[z]), 'mrd'] = mb
