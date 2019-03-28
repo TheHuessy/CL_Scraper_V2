@@ -273,6 +273,9 @@ for z in range(len(zips)):
         try:
             pspt = bsl.find("time", class_ = "date timeago")
             pspt = pspt['datetime']
+            pspt = pspt.replace("T", " ")
+            pspt = re.sub('-\d{4}', '', pspt)
+            pspt = datetime.datetime.strptime(pspt, "%Y-%m-%d %H:%M:%S")
             #If there are still formatting issues, try to pull the value of 'title' instead of 'datetime'
         except:
             pspt = "NA"
@@ -441,9 +444,10 @@ for z in range(len(zips)):
     
     ## Check the clpull most recent post date and add it to ctime
     mrp = max(clpull['Post_Date'])
-    mrp = mrp.replace("T", " ")
-    mrp = re.sub('-.*', '', mrp)    
-    mb = datetime.datetime.strptime(mrp, "%Y-%m-%d %H:%M:%S")
+    ## After changing the method of pulling post date, the following 3 lines are not needed (and the second one is wrong!)
+    #mrp = mrp.replace("T", " ")
+    #mrp = re.sub('-.*', '', mrp)    
+    #mb = datetime.datetime.strptime(mrp, "%Y-%m-%d %H:%M:%S")
     
     ctime.loc[ctime.zips == int(zips[z]), 'mrd'] = mb
     
@@ -460,7 +464,7 @@ print("Daily Table Done!")
 
 print("Finalizing Master Table...")
 
-civis.io.dataframe_to_civis(cltpull, database = 'Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'drop')
+civis.io.dataframe_to_civis(cltpull, database = 'Boston', table = 'sandbox.craigslist_master', existing_table_rows = 'append')
 print("Daily Master Done!")
 
 
